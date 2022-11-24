@@ -1,0 +1,24 @@
+Private Sub Worksheet_Change(ByVal Target As Range)
+
+    'Sub for Liste med opgaver sheet
+
+    Dim ToSht As String
+    Dim FroSht As String
+    Dim YsNo As String
+    Dim Z As Long
+    Dim xVal As String
+
+On Error Resume Next
+
+If Intersect(Target, Range("E:E")) Is Nothing Then Exit Sub
+    Application.EnableEvents = False
+        For Z = 1 To Target.Count
+            If Target(Z).Value > 0 Then
+            '********************************
+            YsNo = "no"
+            '**********************************
+            Call MoveBasedOnValue(YsNo)
+            End If
+            Next
+    Application.EnableEvents = True
+End Sub
