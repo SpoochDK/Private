@@ -1,0 +1,42 @@
+Sub MoveBasedOnValue(YsNo As String)
+
+    'Common Sub for a Code Module
+    Dim xRg As Range
+    Dim xCell As Range
+    Dim A As Long
+    Dim B As Long
+    Dim C As Long
+
+    Dim ToSheet As Worksheet
+    Dim FroSheet As Worksheet
+
+    Select Case YsNo
+        Case "yes"
+            Set ToSheet = Sheets("Afsluttede opgaver")
+            Set FroSheet = Sheets("Liste med opgaver")
+        Case "no"
+            Set ToSheet = Sheets("Afsluttede opgaver")
+            Set FroSheet = Sheets("Liste med opgaver")
+    End Select
+
+    A = FroSheet.UsedRange.Rows.Count
+    B = ToSheet.UsedRange.Rows.Count
+
+    If B = 1 Then
+        If Application.WorksheetFunction.CountA(ToSheet.UsedRange) = 0 Then B = 0
+    End If
+    Set xRg = FroSheet.Range("E1:E" & A)
+    On Error Resume Next
+    Application.ScreenUpdating = False
+    For C = 1 To xRg.Count
+        If CStr(xRg(C).Value) = YsNo Then
+            xRg(C).EntireRow.Copy Destination:=ToSheet.Range("A" & B + 1)
+            xRg(C).EntireRow.Delete
+            If CStr(xRg(C).Value) = YsNo Then
+                C = C - 1
+            End If
+            B = B + 1
+        End If
+    Next
+    Application.ScreenUpdating = True
+End Sub
